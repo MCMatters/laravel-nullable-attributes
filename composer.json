@@ -1,0 +1,20 @@
+{
+    "name": "mcmatters/laravel-nullable-attribute",
+    "description": "Laravel nullable attributes",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dmitry Borzyonok",
+            "email": "dima.matters@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "illuminate/support": "5.*"
+    },
+    "autoload": {
+        "files": [
+            "src/helpers.php"
+        ]
+    }
+}
