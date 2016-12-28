@@ -38,12 +38,12 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->app['command.nullable-attributes.cache'] = $this->app->share(
             function () {
-                return new McMatters\Console\Cache();
+                return new Console\Cache();
             }
         );
         $this->app['command.nullable-attributes.clear'] = $this->app->share(
             function () {
-                return new McMatters\Console\Clear();
+                return new Console\Clear();
             }
         );
 
