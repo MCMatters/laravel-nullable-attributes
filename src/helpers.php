@@ -23,12 +23,7 @@ if (!function_exists('get_model_nullable_attributes')) {
         if ($reflection->isInstantiable() &&
             $reflection->isSubclassOf(\Illuminate\Database\Eloquent\Model::class)
         ) {
-            $model = new $modelName;
-            $nullableAttributes = $model->getNullableAttributes($modelName);
-            if (!empty($nullableAttributes)) {
-                return $nullableAttributes;
-            }
-            $table = $model->getTable();
+            $table = (new $modelName)->getTable();
             /** @var array $columns */
             $columns = $manager->tryMethod('listTableColumns', $table);
             if (!$columns) {
