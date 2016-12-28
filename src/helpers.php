@@ -24,8 +24,9 @@ if (!function_exists('get_model_nullable_attributes')) {
             $reflection->isSubclassOf(\Illuminate\Database\Eloquent\Model::class)
         ) {
             $model = new $modelName;
-            if (isset($model::$nullableAttributes[$modelName])) {
-                return $model::$nullableAttributes[$modelName];
+            $nullableAttributes = $model->getNullableAttributes($modelName);
+            if (!empty($nullableAttributes)) {
+                return $nullableAttributes;
             }
             $table = $model->getTable();
             /** @var array $columns */

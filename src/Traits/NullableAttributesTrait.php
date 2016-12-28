@@ -51,4 +51,16 @@ trait NullableAttributesTrait
         }
         return parent::setAttribute($key, $val);
     }
+
+    /**
+     * @param null $modelName
+     * @return array
+     */
+    public function getNullableAttributes($modelName = null): array
+    {
+        if (null !== $modelName) {
+            return self::$nullableAttributes[$modelName] ?? [];
+        }
+        return self::$nullableAttributes;
+    }
 }
