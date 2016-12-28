@@ -13,6 +13,9 @@
         "illuminate/support": "5.*"
     },
     "autoload": {
+        "psr-4": {
+            "McMatters\\NullableAttributes\\": "src/"
+        },
         "files": [
             "src/helpers.php"
         ]

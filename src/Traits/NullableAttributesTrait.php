@@ -1,11 +1,11 @@
 <?php
 
-namespace McMatters\Traits;
+namespace McMatters\NullableAttributes\Traits;
 
 /**
  * Class NullableAttributesTrait
  *
- * @package McMatters\Traits
+ * @package McMatters\NullableAttributes\Traits
  */
 trait NullableAttributesTrait
 {

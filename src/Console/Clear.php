@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace McMatters\Console;
+namespace McMatters\NullableAttributes\Console;
 
 use File;
 use Illuminate\Console\Command;
@@ -10,7 +10,7 @@ use Illuminate\Console\Command;
 /**
  * Class Clear
  *
- * @package McMatters\Console
+ * @package McMatters\NullableAttributes\Console
  */
 class Clear extends Command
 {
