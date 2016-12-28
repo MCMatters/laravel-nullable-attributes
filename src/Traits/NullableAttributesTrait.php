@@ -1,6 +1,6 @@
 <?php
 
-namespace McMatterrs\Traits;
+namespace McMatters\Traits;
 
 /**
  * Class NullableAttributesTrait
