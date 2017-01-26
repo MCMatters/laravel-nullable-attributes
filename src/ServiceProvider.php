@@ -36,16 +36,12 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function registerCommands()
     {
-        $this->app['command.nullable-attributes.cache'] = $this->app->share(
-            function () {
-                return new Console\Cache();
-            }
-        );
-        $this->app['command.nullable-attributes.clear'] = $this->app->share(
-            function () {
-                return new Console\Clear();
-            }
-        );
+        $this->app->singleton('command.nullable-attributes.cache', function () {
+            return new Console\Cache();
+        });
+        $this->app->singleton('command.nullable-attributes.clear', function () {
+            return new Console\Clear();
+        });
 
         $this->commands([
             'command.nullable-attributes.cache',
