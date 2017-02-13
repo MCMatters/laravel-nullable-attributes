@@ -21,6 +21,7 @@ if (!function_exists('get_model_nullable_attributes')) {
         $attributes = [];
         $reflection = new ReflectionClass($modelName);
         if ($reflection->isInstantiable() &&
+            !$reflection->isSubclassOf(\Illuminate\Database\Eloquent\Relations\Pivot::class) &&
             $reflection->isSubclassOf(\Illuminate\Database\Eloquent\Model::class)
         ) {
             $table = (new $modelName)->getTable();
