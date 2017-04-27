@@ -35,7 +35,7 @@ trait NullableAttributesTrait
             return;
         }
 
-        self::$nullableAttributes[static::class] = get_model_nullable_attributes(
+        self::$nullableAttributes = get_model_nullable_attributes(
             static::class
         );
     }
@@ -50,7 +50,7 @@ trait NullableAttributesTrait
     {
         if (is_string($val) &&
             !($val = trim($val)) &&
-            in_array($key, static::$nullableAttributes[static::class], true)
+            in_array($key, static::$nullableAttributes, true)
         ) {
             $val = null;
         }
