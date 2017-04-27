@@ -8,6 +8,7 @@ use File;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use ReflectionClass;
+use ReflectionException;
 use Symfony\Component\ClassLoader\ClassMapGenerator;
 
 /**
@@ -37,7 +38,7 @@ class Cache extends Command
         $content = '<?php'.PHP_EOL.'return '.var_export($nullables, true).';';
         $fileName = storage_path('app/nullable_attributes.php');
         File::put($fileName, $content);
-        $this->info('Successfully written to the '.$fileName);
+        $this->info("Successfully written to the {$fileName}");
     }
 
     /**
@@ -48,7 +49,12 @@ class Cache extends Command
         $models = [];
         $dir = config('nullable-attributes.folder');
         foreach (ClassMapGenerator::createMap($dir) as $model => $path) {
-            $reflection = new ReflectionClass($model);
+            try {
+                $reflection = new ReflectionClass($model);
+            } catch (ReflectionException $e) {
+                continue;
+            }
+
             if ($reflection->isInstantiable() &&
                 $reflection->isSubclassOf(Model::class)
             ) {

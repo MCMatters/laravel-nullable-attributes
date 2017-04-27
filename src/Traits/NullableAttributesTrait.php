@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace McMatters\NullableAttributes\Traits;
 
 /**
@@ -24,15 +26,18 @@ trait NullableAttributesTrait
         if (null === $cache) {
             $cacheFile = storage_path('app/nullable_attributes.php');
             $cache = file_exists($cacheFile) ? include $cacheFile : false;
-            $cache = is_array($cacheFile) ? $cacheFile : false;
+            $cache = is_array($cache) ? $cache : false;
         }
 
         if (false !== $cache && isset($cache[static::class])) {
             self::$nullableAttributes = $cache[static::class];
+
             return;
-        } else {
-            self::$nullableAttributes[static::class] = get_model_nullable_attributes(static::class);
         }
+
+        self::$nullableAttributes[static::class] = get_model_nullable_attributes(
+            static::class
+        );
     }
 
     /**
@@ -49,18 +54,20 @@ trait NullableAttributesTrait
         ) {
             $val = null;
         }
+
         return parent::setAttribute($key, $val);
     }
 
     /**
-     * @param null $modelName
+     * @param string|null $modelName
      * @return array
      */
-    public function getNullableAttributes($modelName = null): array
+    public function getNullableAttributes(string $modelName = null): array
     {
         if (null !== $modelName) {
             return self::$nullableAttributes[$modelName] ?? [];
         }
+
         return self::$nullableAttributes;
     }
 }

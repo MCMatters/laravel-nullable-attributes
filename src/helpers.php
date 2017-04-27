@@ -36,6 +36,7 @@ if (!function_exists('get_model_nullable_attributes')) {
                 }
             }
         }
+
         return $attributes;
     }
 }

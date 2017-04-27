@@ -31,6 +31,6 @@ class Clear extends Command
     {
         $fileName = storage_path('app/nullable_attributes.php');
         File::delete($fileName);
-        $this->info('Successfully removed '.$fileName);
+        $this->info("Successfully removed {$fileName}");
     }
 }

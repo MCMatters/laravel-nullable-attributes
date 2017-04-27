@@ -19,7 +19,9 @@ class ServiceProvider extends BaseServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/nullable-attributes.php' => config_path('nullable-attributes.php'),
+            __DIR__.'/../config/nullable-attributes.php' => config_path(
+                'nullable-attributes.php'
+            ),
         ]);
     }
 
