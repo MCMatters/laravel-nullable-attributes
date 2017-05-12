@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace McMatters\NullableAttributes\Console;
 
-use File;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 
 /**
  * Class Clear
@@ -29,7 +29,7 @@ class Clear extends Command
      */
     public function handle()
     {
-        $fileName = storage_path('app/nullable_attributes.php');
+        $fileName = config('nullable-attributes.cache');
         File::delete($fileName);
         $this->info("Successfully removed {$fileName}");
     }

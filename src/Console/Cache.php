@@ -4,9 +4,11 @@ declare(strict_types = 1);
 
 namespace McMatters\NullableAttributes\Console;
 
-use File;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\ClassLoader\ClassMapGenerator;
@@ -33,21 +35,24 @@ class Cache extends Command
      */
     public function handle()
     {
-        $models = $this->loadModels();
+        $models = $this->getModels();
         $nullables = $this->findNullables($models);
+
         $content = '<?php'.PHP_EOL.'return '.var_export($nullables, true).';';
-        $fileName = storage_path('app/nullable_attributes.php');
+        $fileName = config('nullable-attributes.cache');
         File::put($fileName, $content);
+
         $this->info("Successfully written to the {$fileName}");
     }
 
     /**
      * @return array
      */
-    protected function loadModels(): array
+    protected function getModels(): array
     {
         $models = [];
-        $dir = config('nullable-attributes.folder');
+        $dir = config('nullable-attributes.models');
+
         foreach (ClassMapGenerator::createMap($dir) as $model => $path) {
             try {
                 $reflection = new ReflectionClass($model);
@@ -56,6 +61,7 @@ class Cache extends Command
             }
 
             if ($reflection->isInstantiable() &&
+                !$reflection->isSubclassOf(Pivot::class) &&
                 $reflection->isSubclassOf(Model::class)
             ) {
                 $models[] = $model;
@@ -73,10 +79,43 @@ class Cache extends Command
     protected function findNullables(array $models): array
     {
         $nullables = [];
+
         foreach ($models as $model) {
-            $nullables[$model] = get_model_nullable_attributes($model);
+            $nullables[$model] = $this->getNullablesFromDb($model);
         }
 
         return $nullables;
+    }
+
+    /**
+     * @param string $model
+     *
+     * @return array
+     */
+    protected function getNullablesFromDb(string $model): array
+    {
+        static $manager;
+
+        if (null === $manager) {
+            $manager = DB::getDoctrineSchemaManager();
+        }
+
+        $attributes = [];
+
+        $table = (new $model)->getTable();
+        /** @var array $columns */
+        $columns = $manager->tryMethod('listTableColumns', $table);
+
+        if (!$columns) {
+            return [];
+        }
+
+        foreach ($columns as $column) {
+            if (!$column->getNotnull() && null === $column->getDefault()) {
+                $attributes[] = $column->getName();
+            }
+        }
+
+        return $attributes;
     }
 }

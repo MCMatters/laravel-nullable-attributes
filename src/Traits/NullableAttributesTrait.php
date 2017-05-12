@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace McMatters\NullableAttributes\Traits;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Class NullableAttributesTrait
  *
@@ -12,62 +14,34 @@ namespace McMatters\NullableAttributes\Traits;
 trait NullableAttributesTrait
 {
     /**
-     * @var array
-     */
-    protected static $nullableAttributes = [];
-
-    /**
      * Boot trait.
      */
     public static function bootNullableAttributesTrait()
     {
-        static $cache;
+        self::saving(function (Model $model) {
+            $model->convertEmptyToNullableAttributes();
+        });
+    }
 
-        if (null === $cache) {
-            $cacheFile = storage_path('app/nullable_attributes.php');
-            $cache = file_exists($cacheFile) ? include $cacheFile : false;
-            $cache = is_array($cache) ? $cache : false;
-        }
-
-        if (false !== $cache && isset($cache[static::class])) {
-            self::$nullableAttributes = $cache[static::class];
-
-            return;
-        }
-
-        self::$nullableAttributes = get_model_nullable_attributes(
-            static::class
+    /**
+     * @return void
+     */
+    protected function convertEmptyToNullableAttributes()
+    {
+        /** @var array $nullableAttributes */
+        $nullableAttributes = array_get(
+            config('nullable-attributes.attributes'),
+            get_class($this),
+            []
         );
-    }
 
-    /**
-     * Workaround for empty values
-     *
-     * @param string $key
-     * @param mixed $val
-     */
-    public function setAttribute($key, $val)
-    {
-        if (is_string($val) &&
-            !($val = trim($val)) &&
-            in_array($key, static::$nullableAttributes, true)
-        ) {
-            $val = null;
+        foreach ($nullableAttributes as $attribute) {
+            $modelAttribute = $this->getAttribute($attribute);
+            if ((is_array($modelAttribute) && empty($modelAttribute)) ||
+                (is_string($modelAttribute) && trim($modelAttribute) === '')
+            ) {
+                $this->setAttribute($attribute, null);
+            }
         }
-
-        return parent::setAttribute($key, $val);
-    }
-
-    /**
-     * @param string|null $modelName
-     * @return array
-     */
-    public function getNullableAttributes(string $modelName = null): array
-    {
-        if (null !== $modelName) {
-            return self::$nullableAttributes[$modelName] ?? [];
-        }
-
-        return self::$nullableAttributes;
     }
 }
