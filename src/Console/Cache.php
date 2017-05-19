@@ -51,7 +51,7 @@ class Cache extends Command
     protected function getModels(): array
     {
         $models = [];
-        $dir = config('nullable-attributes.models');
+        $dir = config('nullable-attributes.folder');
 
         foreach (ClassMapGenerator::createMap($dir) as $model => $path) {
             try {
