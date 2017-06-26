@@ -22,5 +22,12 @@
         "psr-4": {
             "McMatters\\NullableAttributes\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "McMatters\\NullableAttributes\\ServiceProvider"
+            ]
+        }
     }
 }
