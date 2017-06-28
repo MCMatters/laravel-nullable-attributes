@@ -21,7 +21,7 @@ class ServiceProvider extends BaseServiceProvider
         $configPath = __DIR__.'/../config/nullable-attributes.php';
 
         $this->publishes([
-            $configPath => config_path('nullable-attributes.php'),
+            $configPath => $this->configPath('nullable-attributes.php'),
         ], 'config');
 
         $this->mergeConfigFrom($configPath, 'nullable-attributes');
@@ -57,5 +57,19 @@ class ServiceProvider extends BaseServiceProvider
         $attributes = is_array($cache) ? $cache : [];
 
         config(['nullable-attributes.attributes' => $attributes]);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    protected function configPath(string $file): string
+    {
+        if (function_exists('config_path')) {
+            return config_path($file);
+        }
+
+        return base_path("config/{$file}");
     }
 }
