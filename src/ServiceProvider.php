@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace McMatters\NullableAttributes;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 /**
@@ -52,11 +53,11 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function setNullableAttributes()
     {
-        $cacheFile = config('nullable-attributes.cache');
+        $cacheFile = Config::get('nullable-attributes.cache');
         $cache = file_exists($cacheFile) ? include $cacheFile : false;
         $attributes = is_array($cache) ? $cache : [];
 
-        config(['nullable-attributes.attributes' => $attributes]);
+        Config::set('nullable-attributes.attributes', $attributes);
     }
 
     /**

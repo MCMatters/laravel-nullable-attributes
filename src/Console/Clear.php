@@ -1,10 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace McMatters\NullableAttributes\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
 /**
@@ -25,12 +26,14 @@ class Clear extends Command
     protected $description = 'Clear cache of nullable attributes of all models';
 
     /**
-     * Handle the command.
+     * @return void
      */
     public function handle()
     {
-        $fileName = config('nullable-attributes.cache');
+        $fileName = Config::get('nullable-attributes.cache');
+
         File::delete($fileName);
+
         $this->info("Successfully removed {$fileName}");
     }
 }

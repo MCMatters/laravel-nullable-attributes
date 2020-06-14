@@ -4,14 +4,15 @@ declare(strict_types = 1);
 
 namespace McMatters\NullableAttributes\Console;
 
+use Composer\Autoload\ClassMapGenerator;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use ReflectionClass;
 use ReflectionException;
-use Symfony\Component\ClassLoader\ClassMapGenerator;
 
 /**
  * Class Cache
@@ -31,7 +32,7 @@ class Cache extends Command
     protected $description = 'Cache nullable attributes of all models';
 
     /**
-     * Handle the command.
+     * @return void
      */
     public function handle()
     {
@@ -39,7 +40,7 @@ class Cache extends Command
         $nullables = $this->findNullables($models);
 
         $content = '<?php'.PHP_EOL.'return '.var_export($nullables, true).';';
-        $fileName = config('nullable-attributes.cache');
+        $fileName = Config::get('nullable-attributes.cache');
         File::put($fileName, $content);
 
         $this->info("Successfully written to the {$fileName}");
@@ -51,7 +52,7 @@ class Cache extends Command
     protected function getModels(): array
     {
         $models = [];
-        $dir = config('nullable-attributes.folder');
+        $dir = Config::get('nullable-attributes.folder');
 
         foreach (ClassMapGenerator::createMap($dir) as $model => $path) {
             try {
@@ -60,7 +61,8 @@ class Cache extends Command
                 continue;
             }
 
-            if ($reflection->isInstantiable() &&
+            if (
+                $reflection->isInstantiable() &&
                 !$reflection->isSubclassOf(Pivot::class) &&
                 $reflection->isSubclassOf(Model::class)
             ) {
@@ -103,6 +105,7 @@ class Cache extends Command
         $attributes = [];
 
         $table = (new $model)->getTable();
+
         /** @var array $columns */
         $columns = $manager->tryMethod('listTableColumns', $table);
 
