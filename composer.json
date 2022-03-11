@@ -14,8 +14,8 @@
         "doctrine/dbal": "^2.5",
         "illuminate/config": "^5.2 || 6.* || 7.* || 8.*",
         "illuminate/console": "^5.2 || 6.* || 7.* || 8.*",
-        "illuminate/database": "^5.2 || 6.* || 7. || 8.**",
-        "illuminate/filesystem": "^5.2 || 6.* || 7. || 8.**",
+        "illuminate/database": "^5.2 || 6.* || 7. || 8.*",
+        "illuminate/filesystem": "^5.2 || 6.* || 7. || 8.*",
         "illuminate/support": "^5.2 || 6.* || 7.* || 8.*"
     },
     "autoload": {
