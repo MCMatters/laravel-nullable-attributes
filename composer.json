@@ -12,11 +12,11 @@
         "php": ">=7.0",
         "composer/composer": "^1.5",
         "doctrine/dbal": "^2.5",
-        "illuminate/config": "^5.2 || 6.* || 7.* || 8.*",
-        "illuminate/console": "^5.2 || 6.* || 7.* || 8.*",
-        "illuminate/database": "^5.2 || 6.* || 7. || 8.*",
-        "illuminate/filesystem": "^5.2 || 6.* || 7. || 8.*",
-        "illuminate/support": "^5.2 || 6.* || 7.* || 8.*"
+        "illuminate/config": "^5.2 || 6.* || 7.* || 8.* || 9.* || 10.*",
+        "illuminate/console": "^5.2 || 6.* || 7.* || 8.* || 9.* || 10.*",
+        "illuminate/database": "^5.2 || 6.* || 7. || 8.* || 9.* || 10.*",
+        "illuminate/filesystem": "^5.2 || 6.* || 7. || 8.* || 9.* || 10.*",
+        "illuminate/support": "^5.2 || 6.* || 7.* || 8.* || 9.* || 10.*"
     },
     "autoload": {
         "psr-4": {
